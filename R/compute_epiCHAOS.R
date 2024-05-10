@@ -2,10 +2,24 @@
 #' @importFrom magrittr %>%
 magrittr::`%>%`
 
+#' @importFrom ggplot2 aes labs geom_bar theme_classic theme element_text
+ggplot2::aes
+ggplot2::labs
+ggplot2::geom_bar
+ggplot2::theme_classic
+ggplot2::theme
+ggplot2::element_text()
+
 #' @importFrom stats lm reorder residuals
 stats::lm
 stats::reorder
 stats::residuals
+
+#' @importFrom jaccard jaccard
+jaccard::jaccard
+
+#' @importFrom stringr str_split
+stringr::str_split
 
 #' Compute epiCHAOS scores on a list of matrices
 #'
@@ -15,6 +29,12 @@ stats::residuals
 #' @export
 #'
 #' @examples
+#' library(magrittr)
+#' m1 <- sample(c(0,1), 5*10, prob=c(0.8,0.2), replace = TRUE) %>% matrix(5,10)
+#' m2 <- sample(c(0,1), 5*10, prob=c(0.8,0.2), replace = TRUE) %>% matrix(5,10)
+#' rownames(m1) <- rownames(m2) <- 1:5
+#' colnames(m1) <- colnames(m2) <- paste0("cell", 1:10)
+#' x <- list(m1=m1, m2=m2)
 #' heterogeneity <- compute.eITH(x)
 compute.eITH <- function(x) {
 
@@ -81,7 +101,13 @@ compute.eITH <- function(x) {
 #' @export
 #'
 #' @examples
-#' matrices <- compute.group.matrices(counts, metadata, "seurat_clusters", m=50)
+#' library(magrittr)
+#' counts <- sample(c(0,1), 10*100, prob=c(0.8,0.2), replace = TRUE) %>% matrix(10,100)
+#' rownames(counts) <- 1:nrow(counts)
+#' colnames(counts) <- paste0("cell", 1:ncol(counts))
+#' metadata <- data.frame(row.names=colnames(counts),
+#' cluster=sample(c("group1", "group2", "group3"), ncol(counts), replace=TRUE))
+#' matrices <- create.group.matrices(counts, metadata, "cluster", m=10, n=10)
 create.group.matrices <- function(counts, meta, colname, n=100, m=20, index=NULL) {
 
   meta$group <- meta[,colname]
@@ -121,7 +147,15 @@ create.group.matrices <- function(counts, meta, colname, n=100, m=20, index=NULL
 #' @export
 #'
 #' @examples
-#' heterogeneity <- compute.eITH.cancer(matrices)
+#' library(magrittr)
+#' m1 <- sample(c(0,1), 10*10, prob=c(0.8,0.2), replace = TRUE) %>% matrix(10,10)
+#' m2 <- sample(c(0,1), 10*10, prob=c(0.8,0.2), replace = TRUE) %>% matrix(10,10)
+#' rownames <- paste0(c("chr1", "chr2"), ":", seq(1000,100000, 10000), "-",
+#' seq(2000,101000, 10000))
+#' rownames(m1) <- rownames(m2) <- rownames
+#' colnames(m1) <- colnames(m2) <- paste0("cell", 1:10)
+#' x <- list(m1=m1, m2=m2)
+#' heterogeneity <- compute.eITH.cancer(x)
 compute.eITH.cancer <- function(x) {
 
   chromosomes <- rownames(x[[1]]) %>% str_split("-|_|:") %>% lapply("[", 1) %>% unlist() %>% unique()
@@ -186,8 +220,17 @@ compute.eITH.cancer <- function(x) {
 #' @export
 #'
 #' @examples
-#' heterogeneity <- epiCHAOS(counts, metadata, "seurat_cluster", subsample=10)
+#' library(magrittr)
+#' counts <- sample(c(0,1), 10*50, prob=c(0.8,0.2), replace = TRUE) %>% matrix(10,50)
+#' rownames(counts) <- 1:nrow(counts)
+#' colnames(counts) <- paste0("cell", 1:ncol(counts))
+#' metadata <- data.frame(row.names=colnames(counts),
+#' cluster=sample(c("group1", "group2", "group3"), ncol(counts), replace=TRUE))
+#' heterogeneity <- epiCHAOS(counts, metadata, "cluster", subsample=10)
 epiCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NULL, plot=F, cancer=F, subsample=1) {
+
+  # bind variables
+  state <- mean.het <- NULL
 
   #--- create per-group matrices
   print("creating group matrices")

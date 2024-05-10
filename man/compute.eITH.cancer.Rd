@@ -16,5 +16,13 @@ A dataframe containing epiCHAOS scores.
 Compute epiCHAOS scores with per-chromosome count correction, for application to cancer datasets where large copy number alterations may result in differences in total counts per chromosome
 }
 \examples{
-heterogeneity <- compute.eITH.cancer(matrices)
+library(magrittr)
+m1 <- sample(c(0,1), 10*10, prob=c(0.8,0.2), replace = TRUE) \%>\% matrix(10,10)
+m2 <- sample(c(0,1), 10*10, prob=c(0.8,0.2), replace = TRUE) \%>\% matrix(10,10)
+rownames <- paste0(c("chr1", "chr2"), ":", seq(1000,100000, 10000), "-",
+seq(2000,101000, 10000))
+rownames(m1) <- rownames(m2) <- rownames
+colnames(m1) <- colnames(m2) <- paste0("cell", 1:10)
+x <- list(m1=m1, m2=m2)
+heterogeneity <- compute.eITH.cancer(x)
 }

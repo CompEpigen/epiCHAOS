@@ -39,5 +39,11 @@ A dataframe containing epiCHAOS scores for each group.
 Compute epiCHAOS scores given a counts matrix and metadata
 }
 \examples{
-heterogeneity <- epiCHAOS(counts, metadata, "seurat_cluster", subsample=10)
+library(magrittr)
+counts <- sample(c(0,1), 10*50, prob=c(0.8,0.2), replace = TRUE) \%>\% matrix(10,50)
+rownames(counts) <- 1:nrow(counts)
+colnames(counts) <- paste0("cell", 1:ncol(counts))
+metadata <- data.frame(row.names=colnames(counts),
+cluster=sample(c("group1", "group2", "group3"), ncol(counts), replace=TRUE))
+heterogeneity <- epiCHAOS(counts, metadata, "cluster", subsample=10)
 }

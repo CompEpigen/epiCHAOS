@@ -16,5 +16,11 @@ A dataframe containing epiCHAOS scores.
 Compute epiCHAOS scores on a list of matrices
 }
 \examples{
+library(magrittr)
+m1 <- sample(c(0,1), 5*10, prob=c(0.8,0.2), replace = TRUE) \%>\% matrix(5,10)
+m2 <- sample(c(0,1), 5*10, prob=c(0.8,0.2), replace = TRUE) \%>\% matrix(5,10)
+rownames(m1) <- rownames(m2) <- 1:5
+colnames(m1) <- colnames(m2) <- paste0("cell", 1:10)
+x <- list(m1=m1, m2=m2)
 heterogeneity <- compute.eITH(x)
 }

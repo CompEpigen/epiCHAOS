@@ -26,5 +26,11 @@ A list of binarised peaks/regions-by-cells matrices, one for each cluster/group 
 Create group matrices
 }
 \examples{
-matrices <- compute.group.matrices(counts, metadata, "seurat_clusters", m=50)
+library(magrittr)
+counts <- sample(c(0,1), 10*100, prob=c(0.8,0.2), replace = TRUE) \%>\% matrix(10,100)
+rownames(counts) <- 1:nrow(counts)
+colnames(counts) <- paste0("cell", 1:ncol(counts))
+metadata <- data.frame(row.names=colnames(counts),
+cluster=sample(c("group1", "group2", "group3"), ncol(counts), replace=TRUE))
+matrices <- create.group.matrices(counts, metadata, "cluster", m=10, n=10)
 }
