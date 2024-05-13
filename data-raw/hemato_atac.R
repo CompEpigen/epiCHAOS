@@ -12,7 +12,7 @@ atac <- atac[,grepl("BMMC", atac@colData$Group)]
 
 # subset random 10000 peaks
 set.seed(10)
-atac <- atac[sample(nrow(atac), 10000),]
+atac <- atac[sample(nrow(atac), 5000),]
 
 # subset celltypes to have only progenitor cells, monocytes, B, T and NK cells
 atac@colData$BioClassification %>% table()

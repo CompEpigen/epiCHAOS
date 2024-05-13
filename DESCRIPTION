@@ -12,9 +12,9 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
-    testthat (>= 3.0.0),  S4Vectors, GenomicRanges
+    testthat (>= 3.0.0),  S4Vectors
 Config/testthat/edition: 3
-Imports: jaccard, corrr, magrittr, plyr, ggplot2, stringr
+Imports: jaccard, corrr, magrittr, plyr, ggplot2, stringr, IRanges, GenomicRanges
 Depends: 
     R (>= 2.10)
 LazyData: true

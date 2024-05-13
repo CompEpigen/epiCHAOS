@@ -3,15 +3,15 @@
 \docType{data}
 \name{hemato_atac}
 \alias{hemato_atac}
-\title{scATAC-seq Hematopoiesis data}
+\title{Example scATAC-seq data}
 \format{
 \subsection{\code{hemato_atac}}{
 
 A list of three components:
-(i) counts: a sparse matrix containing the peaks-by-cells counts matrix, unbinarized
+(i) counts: a sparse matrix containing the peaks-by-cells counts matrix, unbinarized, subset for 5000 peaks
 (ii) meta: cell metadata including cluster and cell-type annotation corresponding to colnames of counts
 (iii) ranges: a GRanges object corresponding to rownames of counts
-For testing/example purposes the data were subset to 10000 randomly selected rows and subset for progenitor cells, monocytes, B, T and NK cells.
+For testing/example purposes the data were subset to 10000 randomly selected rows and subset for 100 progenitor cells, B, T and NK cells.
 }
 }
 \source{
@@ -21,6 +21,6 @@ For testing/example purposes the data were subset to 10000 randomly selected row
 hemato_atac
 }
 \description{
-single-cell ATAC-seq data from human hematopoiesis (Granja et al. 2019), subset for bone-marrow-derived cells
+single-cell ATAC-seq data from human hematopoiesis (Granja et al. 2019), subset for bone-marrow-derived cells, subset for 5000 peaks.
 }
 \keyword{datasets}

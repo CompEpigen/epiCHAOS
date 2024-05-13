@@ -3,15 +3,13 @@
 \docType{data}
 \name{hemato_rna}
 \alias{hemato_rna}
-\title{scRNA-seq Hematopoiesis data}
+\title{Example scRNA-seq data}
 \format{
 \subsection{\code{hemato_rna}}{
 
-A list of three components:
-(i) data.norm: a sparse matrix containing normalised scRNA-seq counts
-(ii) data.scale: a sparse matrix containing scaled normalised scRNA-seq counts
-(iii) meta: cell metadata including cluster and cell-type annotation corresponding to colnames of counts
-For testing/example purposes the data were subset for progenitor cells, B, T and NK cells.
+A list of two components:
+(i) data.scale: a sparse matrix containing scaled normalised scRNA-seq counts for subset of 100 HSCs, B-cells and T-cells
+(ii) meta: cell metadata including cluster and cell-type annotation corresponding to colnames of counts
 }
 }
 \source{
@@ -21,6 +19,6 @@ For testing/example purposes the data were subset for progenitor cells, B, T and
 hemato_rna
 }
 \description{
-single-cell RNA-seq data from human hematopoiesis (Granja et al. 2019), subset for bone-marrow-derived cells
+single-cell RNA-seq data from human hematopoiesis (Granja et al. 2019), subset for bone-marrow-derived cells, subset for 5000 genes to use for example purposes
 }
 \keyword{datasets}

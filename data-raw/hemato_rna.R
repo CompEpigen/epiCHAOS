@@ -23,6 +23,9 @@ rna <- rna[,keep.ids]
 #--- create a seurat object, then normalise and scale the data
 gex <- CreateSeuratObject(counts = rna@assays@.xData$data$counts, meta.data = data.frame(rna@colData))
 
+# subset to 5000 genes to use only for example purposes
+gex <- gex[sample(nrow(gex), 5000),]
+
 #--- normalise and scale the data
 gex <- NormalizeData(gex)
 gex <- ScaleData(gex, features = rownames(gex))
