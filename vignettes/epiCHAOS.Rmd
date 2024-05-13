@@ -1,0 +1,60 @@
+---
+title: "epiCHAOS"
+author: "Katherine Kelly"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{epiCHAOS-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+EpiCHAOS is a metric for quantifying epigenetic heterogeneity using single-cell epigenomics data. The epiCHAOS R package provides a set of R functions for computing epiCHAOS' heterogeneity score in your own data.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Load the epiCHAOS package
+
+```{r setup}
+library(epiCHAOS)
+```
+
+## Example data
+The epiCHAOS R package includes a small example single-cell ATAC-seq dataset which we will use to demonstrate its functionality. The example dataset is derived from the Granja et al. dataset from human hematopoiesis (REF)
+
+```{r}
+# view example data
+head(hemato_atac$counts)
+```
+
+
+## Run the main epiCHAOS function
+The main fucntion for computing epiCHAOS scores is "epiCHAOS()" which will take as input a single-cell counts matrix together with cell annotation metadata specifying the group on which cell-to-cell heterogeneity should be compared.
+
+```{r}
+library(magrittr)
+
+# example scATAC-seq data
+counts <- hemato_atac$counts
+rownames(counts) <- 1:nrow(counts)
+metadata <- hemato_atac$meta %>% data.frame()
+
+# compute epiCHAOS scores
+heterogeneity <- epiCHAOS(counts = counts, meta = metadata, colname = "BioClassification", n = 50, index = NULL, plot = F, cancer = F, subsample = 1) %>% suppressWarnings()
+
+```
+
+## View heterogeneity scores
+
+```{r}
+
+# inspect epiCHAOS scores
+heterogeneity
+
+```
+
