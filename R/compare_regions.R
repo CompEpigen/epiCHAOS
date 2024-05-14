@@ -41,10 +41,9 @@ compare_regions <- function(counts, regions, n=2000, min.row=20) {
     temp <- regions[[region]]
     select.sites <- IRanges::subsetByOverlaps(data.gr, temp) %>% names()
     temp <- counts[select.sites, ]
-    print(dim(temp))
 
     #--- remove region types with small number of peaks
-    if (nrow(temp)<min.row) { print("too few overlapping peaks, moving to next region"); next }
+    if (nrow(temp)<min.row) { message("too few overlapping peaks, moving to next region"); next }
 
     #--- subset to n regions if specified
     if (nrow(temp)<n) { temp <- temp } else { temp <- temp[sample(nrow(temp), n, replace = F), ]}

@@ -42,7 +42,7 @@ compute.eITH <- function(x) {
   het <- data.frame()
   for (d in names(x)) {
 
-    print(paste0("calculating pairwise distances for ", d))
+    message(paste0("calculating pairwise distances for ", d))
 
     #--- coerce to a dataframe
     temp <- x[[d]] %>% as.matrix() %>% as.data.frame()
@@ -63,7 +63,7 @@ compute.eITH <- function(x) {
 
   }
 
-  print("Compiling epiCHAOS scores")
+  message("Compiling epiCHAOS scores")
 
   #--- create dataframe to hold heterogeneity scores
   het$state <- rownames(het)
@@ -170,7 +170,7 @@ compute.eITH.cancer <- function(x) {
 
     for (d in names(x)) {
 
-      print(paste0("calculating pairwise distances for ", d, " ", chr))
+      message(paste0("calculating pairwise distances for ", d, " ", chr))
       temp <- x[[d]] %>% as.matrix() %>% as.data.frame()
 
       #--- subset single cell matrix for selected chromosome
@@ -236,7 +236,7 @@ epiCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NULL,
   state <- mean.het <- NULL
 
   #--- create per-group matrices
-  print("creating group matrices")
+  message("creating group matrices")
 
   #--- if subsample is kept at 1, epiCHAOS scores are computed once per group
   if (subsample==1) {
@@ -254,7 +254,7 @@ epiCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NULL,
     }
   }
 
-  print("computing epiCHAOS scores")
+  message("computing epiCHAOS scores")
 
   #--- compute epiCHAOS scores
   if (cancer==T) {

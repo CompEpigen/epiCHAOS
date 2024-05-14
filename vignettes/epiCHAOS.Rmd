@@ -4,12 +4,13 @@ author: "Katherine Kelly"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{epiCHAOS-vignette}
+  %\VignetteIndexEntry{epiCHAOS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 EpiCHAOS is a metric for quantifying epigenetic heterogeneity using single-cell epigenomics data. The epiCHAOS R package provides a set of R functions for computing epiCHAOS' heterogeneity score in your own data.
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -17,6 +18,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+# Analyse epigenetic heterogeneity
 
 ## Load the epiCHAOS package
 
@@ -27,7 +30,7 @@ library(epiCHAOS)
 ## Example data
 The epiCHAOS R package includes a small example single-cell ATAC-seq dataset which we will use to demonstrate its functionality. The example dataset is derived from the Granja et al. dataset from human hematopoiesis (REF)
 
-```{r}
+```{r, echo=FALSE, results='asis'}
 # view example data
 head(hemato_atac$counts)
 ```
@@ -58,3 +61,60 @@ heterogeneity
 
 ```
 
+# Compare heterogeneity across genomic regions
+
+The epiCHAOS package includes functionality for comparison of epiCHAOS scores across regions as well as across groups of cells. For this we use the "compare_regions()" function, which takes as input a counts matrix (e.g. a peaks-by-cells matrix in the case of scATAC-seq data) and a set of genomic regions in the form of a GRangesList object.
+
+To demonstrate this, we include a small set of genomic ranges corresponding to different chromatin factor binding sites subset from the ENCODE TFBS hg19 database.
+
+```{r}
+
+# example scATAC-seq data
+counts <- hemato_atac$counts
+rownames(counts) <- paste0(hemato_atac$ranges)
+
+# a GRangesList object of example genomic regions
+regions <- encode_tfbs$ranges
+
+# compute epiCHAOS scores
+per.region.scores <- compare_regions(counts=counts, regions=regions, n=100, min.row=20) %>% suppressWarnings()
+
+```
+
+## View heterogeneity scores
+
+```{r}
+
+# inspect transcriptional heterogeneity scores
+heterogeneity
+
+```
+
+# Analyse transcriptional heterogeneity
+**Note:** EpiCHAOS is designed for application to single-cell epigenomics datasets in binarised form, and is not intended for application to scRNA-seq data. Nevertheless we provide a function for quantifying transcriptional heterogeneity from scRNA-seq data using a similar approach which has been previously described in the literature [REF] Since we have not rigorously validated the performance of this approach, we reccomend that it be used with caution. 
+
+```{r}
+
+# load example scRNAseq data - a normalised and scaled scRNA-seq counts matrix obtained using Seurat
+gex <- hemato_rna$data.scale
+
+# load metadata
+meta <- hemato_rna$meta
+
+# compute transcriptional heterogenetiy
+matrices <- create.group.matrices(gex, meta, colname="Clusters", binarise=FALSE)
+heterogeneity <- compute.tITH(matrices)
+
+```
+
+## View heterogeneity scores
+
+```{r}
+
+# inspect transcriptional heterogeneity scores
+heterogeneity
+
+```
+
+
+# References
