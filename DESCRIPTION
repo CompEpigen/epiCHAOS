@@ -17,7 +17,7 @@ Suggests:
     knitr,
     rmarkdown
 Config/testthat/edition: 3
-Imports: jaccard, corrr, magrittr, plyr, ggplot2, stringr, IRanges, GenomicRanges
+Imports: jaccard, corrr, magrittr, plyr, ggplot2, stringr, IRanges, GenomicRanges, msigdbr, TxDb.Hsapiens.UCSC.hg19.knownGene, TxDb.Hsapiens.UCSC.hg38.knownGene, GenomicFeatures
 Depends: 
     R (>= 2.10)
 LazyData: true

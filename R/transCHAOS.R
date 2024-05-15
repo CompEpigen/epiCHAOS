@@ -41,14 +41,14 @@ compute.tITH <- function(x) {
   het$state <- state
 
   for (state in unique(het$state)) {
-    het$mean.het[het$state==state] <- mean(het$het[het$state==state])
+    het$het[het$state==state] <- mean(het$het[het$state==state])
   }
 
-  het <- het[,c("state", "mean.het")] %>% unique()
+  het <- het[,c("state", "het")] %>% unique()
   het <- na.omit(het)
 
   #--- transform to a range of 0-1
-  het$mean.het <- (het$mean.het - min(het$mean.het)) / (max(het$mean.het) - min(het$mean.het))
+  het$het <- (het$het - min(het$het)) / (max(het$het) - min(het$het))
 
   #--- return heterogeneity score
   return(het)
@@ -74,7 +74,7 @@ compute.tITH <- function(x) {
 transCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NULL, subsample=1) {
 
   # bind variables
-  state <- mean.het <- NULL
+  state <- het <- NULL
 
   #--- create per-group matrices
   message("creating group matrices")

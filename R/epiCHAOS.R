@@ -71,19 +71,19 @@ compute.eITH <- function(x) {
   #--- fit a linear regression model of raw epiCHAOS scores against the total count of the matrices snd take the residuals of the model as a count corrected score
   avg.count <- lapply(x, colMeans) %>% lapply(mean) %>% unlist()
   fit <- lm(het$het~avg.count)
-  het$mean.het <- residuals(fit)
+  het$het.adj <- residuals(fit)
 
   #--- convert values to a range of 0,1
   het$het.raw <- (het$het - min(het$het)) / (max(het$het) - min(het$het))
-  het$mean.het <- (het$mean.het - min(het$mean.het)) / (max(het$mean.het) - min(het$mean.het))
+  het$het.adj <- (het$het.adj - min(het$het.adj)) / (max(het$het.adj) - min(het$het.adj))
 
   #--- negate values so that higher score reflects higher heterogeneity
   het$het.raw <- 1-het$het.raw
-  het$mean.het <- 1-het$mean.het
+  het$het.adj <- 1-het$het.adj
 
 
   #--- return a dataframe with raw and count-adjusted epiCHAOS scores for each group
-  return(het[,c("mean.het", "het.raw", "state")])
+  return(het[,c("het.adj", "het.raw", "state")])
 
 }
 
@@ -233,7 +233,7 @@ compute.eITH.cancer <- function(x) {
 epiCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NULL, plot=F, cancer=F, subsample=1) {
 
   # bind variables
-  state <- mean.het <- NULL
+  state <- het.adj <- NULL
 
   #--- create per-group matrices
   message("creating group matrices")
@@ -272,7 +272,7 @@ epiCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NULL,
   if (plot) {
 
     #--- return a barplot of epiCHAOS scores
-    p <- ggplot2::ggplot(het, aes(x = reorder(state, mean.het), y = mean.het+0.01)) +
+    p <- ggplot2::ggplot(het, aes(x = reorder(state, het.adj), y = het.adj+0.01)) +
       geom_bar(stat="identity", position = "dodge", alpha=0.8, width = 0.6)+
       labs(x="", y="epiCHAOS")+
       theme_classic() +

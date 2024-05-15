@@ -28,7 +28,7 @@ library(epiCHAOS)
 ```
 
 ## Example data
-The epiCHAOS R package includes a small example single-cell ATAC-seq dataset which we will use to demonstrate its functionality. The example dataset is derived from the Granja et al. dataset from human hematopoiesis (REF)
+The epiCHAOS R package includes a small example single-cell ATAC-seq dataset which we will use to demonstrate its functionality. The example dataset is derived from the [Granja et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7258684/) dataset from human hematopoiesis
 
 ```{r, echo=FALSE, results='asis'}
 # view example data
@@ -91,7 +91,7 @@ heterogeneity
 ```
 
 # Analyse transcriptional heterogeneity
-**Note:** EpiCHAOS is designed for application to single-cell epigenomics datasets in binarised form, and is not intended for application to scRNA-seq data. Nevertheless we provide a function for quantifying transcriptional heterogeneity from scRNA-seq data using a similar approach which has been previously described in the literature [REF] Since we have not rigorously validated the performance of this approach, we reccomend that it be used with caution. 
+**Note:** EpiCHAOS is designed for application to single-cell epigenomics datasets in binarised form, and is not intended for application to scRNA-seq data. Nevertheless we provide a function for quantifying transcriptional heterogeneity from scRNA-seq data using a similar approach which has been previously described in the literature, for example in the work of [Hinohara et al.](https://pubmed.ncbi.nlm.nih.gov/30472020/). Since we have not rigorously validated the performance of this approach, we reccomend that it be used with caution. 
 
 ```{r}
 
@@ -101,9 +101,8 @@ gex <- hemato_rna$data.scale
 # load metadata
 meta <- hemato_rna$meta
 
-# compute transcriptional heterogenetiy
-matrices <- create.group.matrices(gex, meta, colname="Clusters", binarise=FALSE)
-heterogeneity <- compute.tITH(matrices)
+# compute transcriptional heterogeneity
+heterogeneity <- transCHAOS(counts = gex, meta = meta, colname = "Clusters")
 
 ```
 
@@ -116,5 +115,3 @@ heterogeneity
 
 ```
 
-
-# References
