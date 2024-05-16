@@ -21,10 +21,13 @@ knitr::opts_chunk$set(
 
 # Analyse epigenetic heterogeneity
 
-## Load the epiCHAOS package
+## Load epiCHAOS and required packages
 
 ```{r setup}
 library(epiCHAOS)
+library(magrittr)
+library(msigdbr)
+library(ggplot2)
 ```
 
 ## Example data
@@ -39,8 +42,7 @@ head(hemato_atac$counts)
 ## Run the main epiCHAOS function
 The main fucntion for computing epiCHAOS scores is "epiCHAOS()" which will take as input a single-cell counts matrix together with cell annotation metadata specifying the group on which cell-to-cell heterogeneity should be compared.
 
-```{r}
-library(magrittr)
+```{r, fig.width=5,fig.height=5}
 
 # example scATAC-seq data
 counts <- hemato_atac$counts
@@ -50,14 +52,15 @@ metadata <- hemato_atac$meta %>% data.frame()
 # compute epiCHAOS scores
 heterogeneity <- epiCHAOS(counts = counts, meta = metadata, colname = "BioClassification", n = 50, index = NULL, plot = F, cancer = F, subsample = 1) %>% suppressWarnings()
 
-```
-
-## View heterogeneity scores
-
-```{r}
-
 # inspect epiCHAOS scores
 heterogeneity
+
+# plot heterogeneity scores
+ggplot(heterogeneity, aes(x = reorder(state, het.adj), y = het.adj+0.01)) +
+      geom_bar(stat="identity", position = "dodge", alpha=0.8, width = 0.6)+
+      labs(x="", y="epiCHAOS")+
+      theme_classic() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
 
@@ -67,7 +70,7 @@ The epiCHAOS package includes functionality for comparison of epiCHAOS scores ac
 
 To demonstrate this, we include a small set of genomic ranges corresponding to different chromatin factor binding sites subset from the ENCODE TFBS hg19 database.
 
-```{r}
+```{r, fig.width=7,fig.height=3}
 
 # example scATAC-seq data
 counts <- hemato_atac$counts
@@ -79,21 +82,43 @@ regions <- encode_tfbs$ranges
 # compute epiCHAOS scores
 per.region.scores <- compare_regions(counts=counts, regions=regions, n=100, min.row=20) %>% suppressWarnings()
 
+# visualise heterogeneity scores
+ggplot(per.region.scores, aes(x = reorder(state, het.adj), y = het.adj+0.01)) +
+      geom_point()+
+      labs(x="", y="epiCHAOS")+
+      theme_classic() +
+      coord_flip()+
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
 ```
 
-## View heterogeneity scores
+# Compare heterogeneity across gene sets/pathways
 
-```{r}
+Similarly,  we can use the "compare_pathways()" function to compare epiCHAOS scores at promoters associated with different gene sets or biological pathways. This function takes as input a counts matrix (e.g. a peaks-by-cells matrix in the case of scATAC-seq data) and a list of gene sets from msigdbr. For each gene set of interest, peaks overlapping with promoters of the genes in that set are selected, and epiCHAOS scores computed per gene set/pathway.
 
-# inspect transcriptional heterogeneity scores
-heterogeneity
+```{r, fig.width=7,fig.height=5}
+
+gene_sets = msigdbr::msigdbr(species = "Homo sapiens")
+gene_sets <- gene_sets[gene_sets$gs_cat=="H",]
+set.names <- gene_sets$gs_name %>% unique()
+per.pathway.scores <- compare_pathways(counts=counts, set.names=set.names, min.row=5, genome="hg19", tss.span=c(1500, 500)) %>% suppressWarnings()
+
+# visualise heterogeneity scores
+ggplot(per.pathway.scores, aes(x = reorder(state, het.adj), y = het.adj+0.01)) +
+      geom_point()+
+      labs(x="", y="epiCHAOS")+
+      theme_classic() +
+      coord_flip()+
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
 
 ```
+
 
 # Analyse transcriptional heterogeneity
 **Note:** EpiCHAOS is designed for application to single-cell epigenomics datasets in binarised form, and is not intended for application to scRNA-seq data. Nevertheless we provide a function for quantifying transcriptional heterogeneity from scRNA-seq data using a similar approach which has been previously described in the literature, for example in the work of [Hinohara et al.](https://pubmed.ncbi.nlm.nih.gov/30472020/). Since we have not rigorously validated the performance of this approach, we reccomend that it be used with caution. 
 
-```{r}
+```{r, fig.width=5,fig.height=5}
 
 # load example scRNAseq data - a normalised and scaled scRNA-seq counts matrix obtained using Seurat
 gex <- hemato_rna$data.scale
@@ -104,14 +129,15 @@ meta <- hemato_rna$meta
 # compute transcriptional heterogeneity
 heterogeneity <- transCHAOS(counts = gex, meta = meta, colname = "Clusters")
 
-```
-
-## View heterogeneity scores
-
-```{r}
-
 # inspect transcriptional heterogeneity scores
 heterogeneity
+
+# plot heterogeneity scores
+ggplot(heterogeneity, aes(x = reorder(state, het), y = het+0.01)) +
+      geom_bar(stat="identity", position = "dodge", alpha=0.8, width = 0.6)+
+      labs(x="", y="epiCHAOS")+
+      theme_classic() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
 

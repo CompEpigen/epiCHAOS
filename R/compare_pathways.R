@@ -68,7 +68,7 @@ compare_pathways <- function(counts, set.names, min.row=10, genome="hg19", tss.s
   message("computing epiCHAOS scores for selected gene sets/pathways")
   for (set in set.names) {
 
-    print(set)
+    #print(set)
 
     #--- select promoters for gene set of interest
     genes <- gene_sets$entrez_gene[gene_sets$gs_name==set] %>% intersect(names(promoters))
