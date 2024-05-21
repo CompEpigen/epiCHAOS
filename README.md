@@ -18,7 +18,7 @@ For details please refer to the epiCHAOS preprint: https://www.biorxiv.org/conte
 #### install the epiCHAOS R package
 ```
 library(devtools)
-install_github("colomemaria/epiAneufinder")
+install_github("Katherine-Kelly/epiCHAOS-R")
 ```
 #### Calculation of epiCHAOS scores
 Calculation of epiCHAOS scores requires (i) a single cell epigenomics dataset in binarised matrix form, e.g. a peaks-by-cells or tiles-by-cells matrix in the case of scATAC-seq data, (ii) cell annotation matching column names to clusters, cell types or other groups on which heterogenetiy scores should be computed.
@@ -27,5 +27,5 @@ The main function for computing epiCHAOS scores is "epiCHAOS()" which takes a co
 
 ```
 # compute epiCHAOS scores
-heterogeneity <- epiCHAOS(counts = counts, meta = metadata, colname = "BioClassification", n = 50, index = NULL, plot = F, cancer = F, subsample = 1)
+heterogeneity <- epiCHAOS(counts = counts, meta = metadata, colname = "seurat_clusters", n = 50, index = NULL, plot = F, cancer = F, subsample = 1)
 ```
