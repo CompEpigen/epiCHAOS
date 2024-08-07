@@ -55,7 +55,7 @@ compare_regions <- function(counts, regions, n=2000, min.row=20) {
   }
 
   #--- compute epiCHAOS scores
-  het <- compute.eITH(matrices)
+  het <- compute_eITH(matrices)
   return(het)
 
 }

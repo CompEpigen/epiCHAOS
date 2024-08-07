@@ -35,8 +35,8 @@ stringr::str_split
 #' rownames(m1) <- rownames(m2) <- 1:5
 #' colnames(m1) <- colnames(m2) <- paste0("cell", 1:10)
 #' x <- list(m1=m1, m2=m2)
-#' heterogeneity <- compute.eITH(x)
-compute.eITH <- function(x) {
+#' heterogeneity <- compute_eITH(x)
+compute_eITH <- function(x) {
 
   # "het" will hold the heterogeneity scores for each condition
   het <- data.frame()
@@ -56,6 +56,7 @@ compute.eITH <- function(x) {
 
     #--- compute pairwise count-centred jaccard indices
     jac <- corrr::colpair_map(temp, jaccard::jaccard, center=T)
+    jac$term <- NULL
     jac <- apply(jac, 1, as.numeric)
 
     #--- commpute the mean of all pairwise differences
@@ -112,6 +113,7 @@ compute.eITH <- function(x) {
 create.group.matrices <- function(counts, meta, colname, n=100, m=20, index=NULL, binarise=TRUE) {
 
   meta$group <- meta[,colname]
+  counts <- as.matrix(counts)
 
   #--- if row indices are provided, subset the counts matrix for the specified rows
   if (is.null(index)) {index <- rownames(counts) }
@@ -158,8 +160,8 @@ create.group.matrices <- function(counts, meta, colname, n=100, m=20, index=NULL
 #' rownames(m1) <- rownames(m2) <- rownames
 #' colnames(m1) <- colnames(m2) <- paste0("cell", 1:10)
 #' x <- list(m1=m1, m2=m2)
-#' heterogeneity <- compute.eITH.cancer(x)
-compute.eITH.cancer <- function(x) {
+#' heterogeneity <- compute_eITH.cancer(x)
+compute_eITH.cancer <- function(x) {
 
   chromosomes <- rownames(x[[1]]) %>% str_split("-|_|:") %>% lapply("[", 1) %>% unlist() %>% unique()
 
@@ -178,6 +180,7 @@ compute.eITH.cancer <- function(x) {
 
       #--- compute pairwise Jaccard distances
       jac <- corrr::colpair_map(temp, jaccard, center=T)
+      jac$term <- NULL
       jac <- apply(jac, 1, as.numeric)
 
       # get mean of pairwise jaccard indices
@@ -258,9 +261,9 @@ epiCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NULL,
 
   #--- compute epiCHAOS scores
   if (cancer==T) {
-    het <- compute.eITH.cancer(x = matrices)
+    het <- compute_eITH.cancer(x = matrices)
   } else {
-    het <- compute.eITH(x = matrices)
+    het <- compute_eITH(x = matrices)
   }
 
   #--- adjust group names if subsampling was performed

@@ -1,11 +1,10 @@
 
-#' @importFrom ggplot2 aes lims labs geom_vline geom_density theme_classic
+#' @importFrom ggplot2 aes lims labs geom_vline geom_density
 ggplot2::aes
 ggplot2::lims
 ggplot2::labs
 ggplot2::geom_vline
 ggplot2::geom_density
-ggplot2::theme_classic
 
 
 #' Function to compute differential epigenetic heterogeneity between two groups using epiCHAOS scores.
@@ -19,7 +18,7 @@ ggplot2::theme_classic
 #'                           (ii) "result.mix": epiCHAOS scores from the permuted mixtures, and
 #'                           (iii) "result.test": epiCHAOS scores from the test groups.
 #' @export
-compute.diff.eICH <- function(group1, group2, region.type, niter=1000) {
+compute_diff_eICH <- function(group1, group2, region.type, niter=1000) {
 
   #--- bind the two peaks-by-cells matrices
   merged <- cbind(group1, group2)
@@ -34,7 +33,7 @@ compute.diff.eICH <- function(group1, group2, region.type, niter=1000) {
   }
 
   #--- compute epiCHAOS scores on the permuted and true matrices
-  het <- compute.eITH(datasets)
+  het <- compute_eITH(datasets)
 
   #--- epiCHAOS scores for permuted groups, excluding those of the true groupings
   het.dist <- het[!het$state %in% c("group1", "group2"),]
@@ -42,7 +41,7 @@ compute.diff.eICH <- function(group1, group2, region.type, niter=1000) {
   #--- find the differences in epiCHAOS scores between pairs of randomly permuted matrices - that will indicate the expected difference in heterogeneity between two randomly selected groups
   dif.dist <- c()
   for (i in 1:nrow(het.dist)/2) {
-    dif <- het.dist$het.adj[i]-het.dist$het.adj[i+1]
+    dif <- het.dist$mean.het[i]-het.dist$mean.het[i+1]
     dif.dist <- c(dif.dist, dif)
   }
 
@@ -52,10 +51,10 @@ compute.diff.eICH <- function(group1, group2, region.type, niter=1000) {
     geom_density() +
     lims(x=c(-1,1)) +
     labs(x="", subtitle = region.type) +
-    geom_vline(aes(xintercept=(het$het.adj[het$state=="group1"]-het$het.adj[het$state=="group2"])), color="red3", linetype="dashed") +
-    theme_classic()
+    geom_vline(aes(xintercept=(het$mean.het[het$state=="group1"]-het$mean.het[het$state=="group2"])), color="red3", linetype="dashed") +
+    theme_bw()
 
   #--- return the results from the permuted mixtures, from the test comparison, and the density plot
-  return(list(plot=gg, result.mix=df, result.test=(het$het.adj[het$state=="group1"]-het$het.adj[het$state=="group2"])))
+  return(list(plot=gg, result.mix=df, result.test=(het$mean.het[het$state=="group1"]-het$mean.het[het$state=="group2"])))
 
 }

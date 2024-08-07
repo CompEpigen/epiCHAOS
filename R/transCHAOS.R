@@ -15,8 +15,8 @@ stats::sd
 #' gex <- hemato_rna$data.scale
 #' meta <- hemato_rna$meta
 #' matrices <- create.group.matrices(gex, meta, colname="Clusters", binarise=FALSE)
-#' heterogeneity <- compute.tITH(matrices)
-compute.tITH <- function(x) {
+#' heterogeneity <- compute_tITH(matrices)
+compute_tITH <- function(x) {
 
   #--- create list to hold heterogeneity scores per celltype/condition
   dists <- list()
@@ -97,7 +97,7 @@ transCHAOS <- function(counts, meta, colname=colnames(meta)[1], n=100, index=NUL
 
   #--- compute epiCHAOS scores
   message("computing  transcriptional heterogeneity scores")
-  het <- compute.tITH(x = matrices)
+  het <- compute_tITH(x = matrices)
 
   #--- adjust group names if subsampling was performed
   if (subsample>1) {

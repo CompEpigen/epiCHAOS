@@ -83,7 +83,7 @@ compare_pathways <- function(counts, set.names, min.row=10, genome="hg19", tss.s
   }
 
   #--- compute epiCHAOS scores
-  het <- compute.eITH(matrices)
+  het <- compute_eITH(matrices)
 
   return(het)
 }
