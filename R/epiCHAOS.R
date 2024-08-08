@@ -112,7 +112,7 @@ compute_eITH <- function(x) {
 #' matrices <- create.group.matrices(counts, metadata, "cluster", m=10, n=10)
 create.group.matrices <- function(counts, meta, colname, n=100, m=20, index=NULL, binarise=TRUE) {
 
-  meta$group <- meta[,colname]
+  meta$grouping <- meta[,colname]
   counts <- as.matrix(counts)
 
   #--- if row indices are provided, subset the counts matrix for the specified rows
@@ -122,8 +122,8 @@ create.group.matrices <- function(counts, meta, colname, n=100, m=20, index=NULL
   #--- create a list to hold counts matrices for each group/cluster
   matrices <- list()
 
-  for (group in unique(meta$group)) {
-    ids <- meta[meta$group==group, ] %>% rownames()
+  for (group in unique(meta$grouping)) {
+    ids <- meta[meta$grouping==group, ] %>% rownames()
 
     #--- if the number of cells is smaller than a specified minimum, skip to the next group
     if (length(ids)<m) { next }
