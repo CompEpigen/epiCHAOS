@@ -15,10 +15,10 @@ For details please refer to the epiCHAOS preprint: https://www.biorxiv.org/conte
 5. Scores are normalised to a range of 0-1 and subtracted from one so that a higher score indicates higher cell-to-cell heterogeneity
    <img width="778" alt="epiCHAOS_schematic" src="https://github.com/CompEpigen/epiCHAOS/assets/61455651/0fdc19e5-7b50-4475-98b0-4ece1f3762a0">
 
-#### install the epiCHAOS R package
+#### Install the epiCHAOS R package
 ```
 library(devtools)
-install_github("Katherine-Kelly/epiCHAOS-R")
+install_github("Katherine-Kelly/epiCHAOS")
 ```
 #### Calculation of epiCHAOS scores
 Calculation of epiCHAOS scores requires (i) a single cell epigenomics dataset in binarised matrix form, e.g. a peaks-by-cells or tiles-by-cells matrix in the case of scATAC-seq data, (ii) cell annotation matching column names to clusters, cell types or other groups on which heterogenetiy scores should be computed.
