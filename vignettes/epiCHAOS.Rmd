@@ -40,7 +40,7 @@ head(hemato_atac$counts)
 
 
 ## Run the main epiCHAOS function
-The main fucntion for computing epiCHAOS scores is "epiCHAOS()" which will take as input a single-cell counts matrix together with cell annotation metadata specifying the group on which cell-to-cell heterogeneity should be compared.
+The main function for computing epiCHAOS scores is "epiCHAOS()" which will take as input a single-cell counts matrix together with cell annotation metadata specifying the group on which cell-to-cell heterogeneity should be compared.
 
 ```{r, fig.width=5,fig.height=5}
 
@@ -63,6 +63,9 @@ ggplot(heterogeneity, aes(x = reorder(state, het.adj), y = het.adj+0.01)) +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
+
+For a statistical comparison of heterogeneity between two groups of interest we also include the "compare_groups()" function. This uses permutation tests to compute a p-value so that the statistical difference in heterogeneity between two groups can be ascertained. Note that this function is computationally time-consuming given the large number of permutations required to assess statistical significance.
+
 
 # Compare heterogeneity across genomic regions
 
@@ -116,7 +119,7 @@ ggplot(per.pathway.scores, aes(x = reorder(state, het.adj), y = het.adj+0.01)) +
 
 
 # Analyse transcriptional heterogeneity
-**Note:** EpiCHAOS is designed for application to single-cell epigenomics datasets in binarised form, and is not intended for application to scRNA-seq data. Nevertheless we provide a function for quantifying transcriptional heterogeneity from scRNA-seq data using a similar approach which has been previously described in the literature, for example in the work of [Hinohara et al.](https://pubmed.ncbi.nlm.nih.gov/30472020/). Since we have not rigorously validated the performance of this approach, we reccomend that it be used with caution. 
+**Note:** EpiCHAOS is designed for application to single-cell epigenomics datasets in binarised form, and is not intended for application to scRNA-seq data. Nevertheless we provide a function for quantifying transcriptional heterogeneity from scRNA-seq data using a similar approach which has been previously described in the literature, for example in the work of [Hinohara et al.](https://pubmed.ncbi.nlm.nih.gov/30472020/). Since we have not rigorously validated the performance of this approach, we recommend that it be used with caution. 
 
 ```{r, fig.width=5,fig.height=5}
 
@@ -135,7 +138,7 @@ heterogeneity
 # plot heterogeneity scores
 ggplot(heterogeneity, aes(x = reorder(state, het), y = het+0.01)) +
       geom_bar(stat="identity", position = "dodge", alpha=0.8, width = 0.6)+
-      labs(x="", y="epiCHAOS")+
+      labs(x="", y="transcHAOS")+
       theme_classic() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
