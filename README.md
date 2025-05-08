@@ -19,7 +19,7 @@ Kelly, K., Scherer, M., Braun, M.M. et al. EpiCHAOS: a metric to quantify epigen
 #### Install the epiCHAOS R package
 ```
 library(devtools)
-install_github("CompEpigen/epiCHAOS")
+install_github("CompEpigen/epiCHAOS", build_vignettes=T)
 ```
 #### Calculation of epiCHAOS scores
 Calculation of epiCHAOS scores requires (i) a single cell epigenomics dataset in binarised matrix form, e.g. a peaks-by-cells or tiles-by-cells matrix in the case of scATAC-seq data, (ii) cell metadata annotation matching column names to clusters, cell types or other groups on which heterogenetiy scores should be computed.
